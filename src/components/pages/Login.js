@@ -2,15 +2,24 @@ import React, { Component } from 'react';
 import Input from '../form/Input';
 import Button from '../form/Button';
 import axios from 'axios';
+import { Redirect } from 'react-router';
 
 const validate = (email, pass) => {
     return email.length > 0 && pass.length > 0 ? true : false; 
 }
 
 class Login extends Component {
-    state = {
-        email: '',
-        password: ''
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            password: '',
+            isLoggedIn: false
+        }
+    }
+
+    sendData = (data) => {
+        
     }
 
     change = (e) => {
@@ -39,6 +48,12 @@ class Login extends Component {
                 
                 localStorage.setItem('jwt', token);
                 localStorage.setItem('expiration', expire);
+                localStorage.setItem('auth', true);
+                
+                let login = true;
+                this.props.authCallback(login);
+
+                console.log(this.props);
                 
             }).catch(error => {
                 console.log(error);
@@ -70,7 +85,6 @@ class Login extends Component {
                    action={(e) => this.handleSubmit(e)}                
                 />            
             </form>
-
         )
     }
 }
